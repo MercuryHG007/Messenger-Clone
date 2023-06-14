@@ -1,4 +1,9 @@
+import { Quicksand } from 'next/font/google'
+import ToasterContext from './context/ToasterContext'
+
 import './globals.css'
+
+const quicksand = Quicksand({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Mercury Messenger',
@@ -12,8 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        {children}
+      <body
+        className={quicksand.className}
+      >
+        <ToasterContext />
+        {children}  
       </body>
     </html>
   )

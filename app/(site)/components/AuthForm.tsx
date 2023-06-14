@@ -16,9 +16,13 @@ import {
     BsGoogle
 } from 'react-icons/bs'
 
+import axios from 'axios'
+import { signIn } from 'next-auth/react'
+
 import Input from "@/app/components/inputs/Input"
 import Button from "@/app/components/Button"
 import AuthSocialButton from "./AuthSocialButton"
+import { toast } from "react-hot-toast"
 
 type Variant = 'LOGIN' | 'REGISTER'
 
@@ -53,18 +57,43 @@ const AuthForm = () => {
         setIsLoading(true)
 
         if (variant === 'REGISTER') {
-            // axios register
+            axios.post('/api/register', data)
+                .then(() => toast.success('Successfully registered!'))
+                .catch(() => toast.error('Something went wrong!'))
+                .finally(() => setIsLoading(false))
         }
 
         if (variant === 'LOGIN') {
-            // nextAuth SignIn
+            signIn('credentials', {
+                ...data,
+                redirect: false
+            })
+                .then((callback) => {
+                    if(callback?.error){
+                        toast.error('Invalid Credentials!')
+                    }
+                    if(callback?.ok && !callback?.error){
+                        toast.success('Logged In!')
+                    }
+                })
+                .finally(() => setIsLoading(false))
+
         }
     }
 
     const socialAction = (action: string) => {
         setIsLoading(true)
 
-        // NextAuth Social SignIn
+        signIn(action, { redirect: false })
+            .then((callback) => {
+                if(callback?.error){
+                    toast.error('Invalid Credentials!')
+                }
+                if(callback?.ok && !callback?.error){
+                    toast.success('Logged In!')
+                }
+            })
+            .finally(() => setIsLoading(false))
     }
 
     return (
@@ -97,6 +126,7 @@ const AuthForm = () => {
                     <Input
                         id="password"
                         label="Password"
+                        type="password"
                         register={register}
                         errors={errors}
                         disabled={isLoading}
