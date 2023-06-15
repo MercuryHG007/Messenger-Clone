@@ -1,5 +1,6 @@
 import { Quicksand } from 'next/font/google'
 import ToasterContext from './context/ToasterContext'
+import AuthContext from './context/AuthContext'
 
 import './globals.css'
 
@@ -12,7 +13,7 @@ export const metadata = {
 
 export default function RootLayout({
   children,
-}: {
+} : {
   children: React.ReactNode
 }) {
   return (
@@ -20,8 +21,10 @@ export default function RootLayout({
       <body
         className={quicksand.className}
       >
-        <ToasterContext />
-        {children}  
+        <AuthContext>
+          <ToasterContext />
+          {children}
+        </AuthContext>
       </body>
     </html>
   )
