@@ -20,12 +20,14 @@ interface ProfileDrawerProps {
     data: Conversation & {
         users: User[]
     }
+    currentUser: User
 }
 
 const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
     isOpen,
     onClose,
-    data
+    data,
+    currentUser
 }) => {
 
     const otherUser = useOtherUser(data)
@@ -34,6 +36,10 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
     const joinedDate = useMemo(() => {
         return format(new Date(otherUser.createdAt), 'PP')
     }, [otherUser.createdAt])
+
+    const createdDate = useMemo(() => {
+        return format(new Date(data.createdAt), 'PP')
+    }, [data.createdAt])
 
     const title = useMemo(() => {
         return data.name || otherUser.name
@@ -176,16 +182,22 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                                                                     <dd
                                                                         className="mt-1 text-sm text-gray-900 sm:col-span-2 pt-1"
                                                                     >
-                                                                        {/* {data.users.map((user) => (
+                                                                        <div
+                                                                            className="flex items-center gap-3 "
+                                                                        >
+                                                                            <Avatar user={currentUser} />
+                                                                            <p>You</p>
+                                                                        </div>
+                                                                        {data.users.filter((user) => user.id !== currentUser.id).map((user) => (
                                                                             <div
                                                                                 key={user.id}
                                                                                 className="flex items-center gap-3 "
                                                                             >
                                                                                 <Avatar user={user} />
-                                                                                <p>{user.name}</p>
+                                                                                <p>{(currentUser.id === user.id) ? 'You' : user.name}</p>
                                                                             </div>
-                                                                        ))} */}
-                                                                        {data.users.map((user) => user.email).join(', ')}
+                                                                        ))}
+                                                                        {/* {data.users.map((user) => user.email).join(', ')} */}
                                                                     </dd>
                                                                 </div>
                                                             )}
@@ -202,6 +214,25 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                                                                         {otherUser.email}
                                                                     </dd>
                                                                 </div>
+                                                            )}
+                                                            {data.isGroup && (
+                                                                <>
+                                                                    <hr />
+                                                                    <div>
+                                                                        <dt
+                                                                            className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 "
+                                                                        >
+                                                                            Created on
+                                                                        </dt>
+                                                                        <dd
+                                                                            className="mt-1 text-sm text-gray-900 sm:col-span-2 "
+                                                                        >
+                                                                            <time dateTime={createdDate}>
+                                                                                {createdDate}
+                                                                            </time>
+                                                                        </dd>
+                                                                    </div>
+                                                                </>
                                                             )}
                                                             {!data.isGroup && (
                                                                 <>

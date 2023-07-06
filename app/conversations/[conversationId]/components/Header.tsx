@@ -11,13 +11,15 @@ import ProfileDrawer from "./ProfileDrawer"
 import AvatarGroup from "@/app/components/AvatarGroup"
 
 interface HeaderProps {
+    currentUser: User
     conversation: Conversation & {
         users: User[]
     }
 }
 
 const Header: React.FC<HeaderProps> = ({
-    conversation
+    conversation,
+    currentUser
 }) => {
     const otherUser = useOtherUser(conversation)
     const [drawerOpen, setDrawerOpen] = useState(false)
@@ -32,6 +34,7 @@ const Header: React.FC<HeaderProps> = ({
     return (
         <>
             <ProfileDrawer
+                currentUser={currentUser}
                 data={conversation}
                 isOpen={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
