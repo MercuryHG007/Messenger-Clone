@@ -12,6 +12,7 @@ import {
 
 import Avatar from "@/app/components/Avatar"
 import ConfirmModal from "./ConfirmModal"
+import AvatarGroup from "@/app/components/AvatarGroup"
 
 interface ProfileDrawerProps {
     isOpen: boolean
@@ -48,7 +49,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
     return (
         <>
             <ConfirmModal
-                isOpen = {confirmOpen}
+                isOpen={confirmOpen}
                 onClose={() => setConfirmOpen(false)}
             />
             <Transition.Root
@@ -126,7 +127,11 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                                                     <div
                                                         className="mb-2"
                                                     >
-                                                        <Avatar user={otherUser} />
+                                                        {data.isGroup ? (
+                                                            <AvatarGroup users={data.users} />
+                                                        ) : (
+                                                            <Avatar user={otherUser} />
+                                                        )}
                                                     </div>
                                                     <div>
                                                         {title}
@@ -161,6 +166,29 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                                                         <dl
                                                             className="space-y-8 px-4 sm:space-y-6 sm:px-6 "
                                                         >
+                                                            {data.isGroup && (
+                                                                <div>
+                                                                    <dt
+                                                                        className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 "
+                                                                    >
+                                                                        Members
+                                                                    </dt>
+                                                                    <dd
+                                                                        className="mt-1 text-sm text-gray-900 sm:col-span-2 pt-1"
+                                                                    >
+                                                                        {/* {data.users.map((user) => (
+                                                                            <div
+                                                                                key={user.id}
+                                                                                className="flex items-center gap-3 "
+                                                                            >
+                                                                                <Avatar user={user} />
+                                                                                <p>{user.name}</p>
+                                                                            </div>
+                                                                        ))} */}
+                                                                        {data.users.map((user) => user.email).join(', ')}
+                                                                    </dd>
+                                                                </div>
+                                                            )}
                                                             {!data.isGroup && (
                                                                 <div>
                                                                     <dt
