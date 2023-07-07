@@ -3,6 +3,7 @@ import ToasterContext from './context/ToasterContext'
 import AuthContext from './context/AuthContext'
 
 import './globals.css'
+import ActiveStatus from './components/ActiveStatus'
 
 const quicksand = Quicksand({ subsets: ['latin'] })
 
@@ -23,6 +24,7 @@ export default function RootLayout({
       >
         <AuthContext>
           <ToasterContext />
+          <ActiveStatus />
           {children}
         </AuthContext>
       </body>
